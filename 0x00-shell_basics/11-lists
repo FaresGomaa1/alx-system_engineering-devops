@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -la; ls -la ..; ls -la /boot
+find . .. /boot -maxdepth 0 -type d -exec ls -la {} \+
