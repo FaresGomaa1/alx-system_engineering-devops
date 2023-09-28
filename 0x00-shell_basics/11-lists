@@ -1,2 +1,2 @@
 #!/bin/bash
-paste <(ls -la . | awk 'NR > 1 {print $NF}') <(ls -la .. | awk 'NR > 1 {print $NF}') <(ls -la /boot | awk 'NR > 1 {print $NF}') -d " "
+ls -la; ls -la ..; ls -la /boot
