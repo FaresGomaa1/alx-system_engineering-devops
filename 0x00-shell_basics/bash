@@ -1,0 +1,5 @@
+read var
+read var2
+echo "#!/bin/bash" > ${var}
+echo "${vare2}" >> ${var}
+chmod +x ${var} 
