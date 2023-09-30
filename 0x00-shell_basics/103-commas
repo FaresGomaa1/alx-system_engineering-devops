@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -A1v | sed -e 's@/$@/,@g' -e 's@^@,@g' -e 's@^,@@' -e '$!s@$@,@' | tr 'n' ' ' | sed 's/,$/n/'
+printf "./, ../, "; ls -Av1 | sed -e '///!s/$/,/' -e 's@/$@/,@' | tr 'n' ' '
