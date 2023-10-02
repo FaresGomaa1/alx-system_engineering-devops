@@ -1,0 +1,6 @@
+read -p "Enter the filename: " var
+read -p "Enter the content: " var2
+echo "#!/bin/bash" > "${var}"
+echo "${var2}" >> "${var}"
+chmod +x "${var}"
+../commit
