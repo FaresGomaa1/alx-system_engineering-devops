@@ -1,13 +1,2 @@
 #!/bin/bash
-flag=1
-while IFS= read -r line
-do
-    if [ $flag -eq 1 ]
-    then
-        echo "$line"
-        flag=0
-    else
-        flag=1
-    fi
-done
-
+printf "%sn" $(cat -n | grep -E '^[0-9]*[13579][[:space:]]' | cut -f2)
