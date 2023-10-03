@@ -1,2 +1,2 @@
 #!/bin/bash
-find . \( -type f -o -type d \) -empty -print0 | xargs -0 -n1 sh -c 'printf "%s\n" "$(basename "$0")"'
+find . \( -type f -o -type d \) -empty | cut -d/ -f2-
