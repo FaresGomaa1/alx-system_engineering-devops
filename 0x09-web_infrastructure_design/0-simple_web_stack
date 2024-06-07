@@ -1,0 +1,47 @@
+### Web Infrastructure Design
+
+**Scenario:**
+A user wants to access the website www.foobar.com.
+
+### Infrastructure Components:
+1. **Server:**
+   - **Role:** A server is a physical or virtual device that provides functionality for other programs or devices, called clients. It handles requests from clients, processes them, and returns the appropriate responses.
+   
+2. **Domain Name (foobar.com):**
+   - **Role:** The domain name is a human-readable address that allows users to access the website without needing to remember the IP address. It is mapped to the server's IP address using DNS.
+   - **DNS Record:** The `www` in `www.foobar.com` is a CNAME (Canonical Name) record pointing to the server's IP address 8.8.8.8.
+
+3. **Web Server (Nginx):**
+   - **Role:** The web server handles incoming HTTP/HTTPS requests from users' browsers, serves static content (like HTML, CSS, JS files), and forwards dynamic requests to the application server.
+
+4. **Application Server:**
+   - **Role:** The application server processes dynamic requests, runs the application code, and generates the appropriate responses (e.g., HTML pages) which it sends back to the web server.
+   - **Application Files:** This includes the codebase that contains the logic and functionality of the website.
+
+5. **Database (MySQL):**
+   - **Role:** The database stores all the data for the website, such as user information, posts, comments, etc. The application server interacts with the database to retrieve and store data as needed.
+
+### Communication Flow:
+1. The user types `www.foobar.com` into their browser.
+2. The browser sends a DNS request to resolve `www.foobar.com` to the IP address `8.8.8.8`.
+3. The browser sends an HTTP/HTTPS request to the web server (Nginx) at `8.8.8.8`.
+4. The web server (Nginx) processes the request. If it's a request for static content, it serves it directly.
+5. If it's a request for dynamic content, the web server forwards it to the application server.
+6. The application server processes the request, interacts with the MySQL database if necessary, and generates a response.
+7. The application server sends the response back to the web server.
+8. The web server forwards the response to the user's browser.
+9. The user's browser renders the response, displaying the website.
+
+### Issues with This Infrastructure:
+
+1. **Single Point of Failure (SPOF):**
+   - Since there is only one server, if it fails, the entire website becomes unavailable. There's no redundancy or backup server.
+
+2. **Downtime During Maintenance:**
+   - Any maintenance activities, like deploying new code or restarting the server, will cause downtime. Users will not be able to access the website during these periods.
+
+3. **Scalability:**
+   - A single server setup cannot handle a significant increase in traffic. If too many users access the website simultaneously, the server might become overloaded, leading to slow performance or downtime.
+
+### Summary:
+This basic web infrastructure includes a single server with an Nginx web server, an application server, and a MySQL database. It is suitable for small-scale websites but has significant limitations in terms of reliability, maintainability, and scalability. For larger or more critical applications, a more robust infrastructure with load balancing, redundancy, and scalability features would be necessary.
