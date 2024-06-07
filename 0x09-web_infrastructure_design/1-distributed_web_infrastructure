@@ -1,0 +1,52 @@
+### Three Server Web Infrastructure Design
+
+**Scenario:**
+A user wants to access the website www.foobar.com.
+
+### Infrastructure Components:
+
+1. **Load Balancer (HAProxy):**
+   - **Role:** Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed, improving availability and reliability.
+   - **Distribution Algorithm:** The load balancer is configured with the round-robin algorithm, which distributes requests evenly across the servers in a circular order, ensuring equal load distribution.
+   - **Active-Active Setup:** Both servers are actively handling traffic, providing redundancy and improved performance. In contrast, an Active-Passive setup would have one server handling all traffic while the other is on standby, ready to take over if the primary server fails.
+
+2. **Web Server 1 (Nginx) + Application Server 1:**
+   - **Role:** Handles incoming HTTP/HTTPS requests, serves static content, and forwards dynamic requests to the application server. Processes application logic and generates responses.
+
+3. **Web Server 2 (Nginx) + Application Server 2:**
+   - **Role:** Similar to Web Server 1, it handles incoming requests, serves static content, and processes dynamic requests. It provides redundancy and load distribution.
+
+4. **Database (MySQL):**
+   - **Role:** Stores all data for the website. Configured in a Primary-Replica (Master-Slave) cluster for redundancy and improved read performance.
+   - **Primary-Replica Cluster:**
+     - **Primary Node:** Handles all write operations and propagates changes to the replica node.
+     - **Replica Node:** Handles read operations, taking some load off the primary node. It is a copy of the primary node, receiving updates asynchronously.
+
+### Communication Flow:
+
+1. The user types `www.foobar.com` into their browser.
+2. The browser sends a DNS request to resolve `www.foobar.com` to the IP address of the load balancer.
+3. The browser sends an HTTP/HTTPS request to the load balancer (HAProxy).
+4. The load balancer distributes the request to one of the web servers (Nginx) using the round-robin algorithm.
+5. The chosen web server processes the request. If it's for static content, it serves it directly.
+6. If it's a request for dynamic content, the web server forwards it to the application server.
+7. The application server processes the request, interacts with the MySQL database if necessary, and generates a response.
+8. The application server sends the response back to the web server.
+9. The web server forwards the response to the load balancer.
+10. The load balancer forwards the response to the user's browser.
+11. The user's browser renders the response, displaying the website.
+
+### Issues with This Infrastructure:
+
+1. **Single Point of Failure (SPOF):**
+   - The load balancer is a SPOF. If it fails, the entire website becomes inaccessible.
+   
+2. **Security Issues:**
+   - No firewall to filter malicious traffic.
+   - No HTTPS, leaving data transmission vulnerable to interception.
+
+3. **No Monitoring:**
+   - Lack of monitoring tools means potential issues like server failures or high traffic loads may not be detected promptly, leading to downtime or degraded performance.
+
+### Summary:
+This three-server infrastructure includes a load balancer (HAProxy), two web servers (Nginx) with application servers, and a MySQL database in a Primary-Replica configuration. This setup improves redundancy, load distribution, and read performance but still has potential issues with single points of failure, security vulnerabilities, and lack of monitoring.
