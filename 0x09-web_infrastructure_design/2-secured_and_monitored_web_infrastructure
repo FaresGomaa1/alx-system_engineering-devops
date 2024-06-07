@@ -1,0 +1,84 @@
+### Secured Three Server Web Infrastructure Design
+
+**Scenario:**
+A user wants to access the website www.foobar.com.
+
+### Infrastructure Components:
+
+1. **Load Balancer (HAProxy):**
+   - **Role:** Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed, improving availability and reliability.
+   - **SSL Termination:** Configured with an SSL certificate to serve traffic over HTTPS, ensuring data encryption from the client to the load balancer.
+   - **Distribution Algorithm:** Round-robin algorithm to evenly distribute requests.
+
+2. **Web Server 1 (Nginx) + Application Server 1:**
+   - **Role:** Handles incoming HTTP/HTTPS requests, serves static content, and forwards dynamic requests to the application server. Processes application logic and generates responses.
+   - **Firewall:** Protects against unauthorized access and attacks by filtering traffic.
+
+3. **Web Server 2 (Nginx) + Application Server 2:**
+   - **Role:** Similar to Web Server 1, it handles incoming requests, serves static content, and processes dynamic requests. It provides redundancy and load distribution.
+   - **Firewall:** Protects against unauthorized access and attacks by filtering traffic.
+
+4. **Database (MySQL):**
+   - **Role:** Stores all data for the website. Configured in a Primary-Replica (Master-Slave) cluster for redundancy and improved read performance.
+   - **Firewall:** Protects the database server from unauthorized access and potential attacks.
+   - **Primary-Replica Cluster:**
+     - **Primary Node:** Handles all write operations and propagates changes to the replica node.
+     - **Replica Node:** Handles read operations, taking some load off the primary node. It is a copy of the primary node, receiving updates asynchronously.
+
+5. **Monitoring Clients:**
+   - **Role:** Collects data on server performance and status, sending it to a monitoring service like Sumologic.
+   - **Placement:** One client on each server to monitor CPU, memory, disk usage, network traffic, and application logs.
+
+### Communication Flow:
+
+1. The user types `www.foobar.com` into their browser.
+2. The browser sends a DNS request to resolve `www.foobar.com` to the IP address of the load balancer.
+3. The browser sends an HTTPS request to the load balancer (HAProxy).
+4. The load balancer decrypts the traffic using the SSL certificate and distributes the request to one of the web servers (Nginx) using the round-robin algorithm.
+5. The chosen web server processes the request. If it's for static content, it serves it directly.
+6. If it's a request for dynamic content, the web server forwards it to the application server.
+7. The application server processes the request, interacts with the MySQL database if necessary, and generates a response.
+8. The application server sends the response back to the web server.
+9. The web server forwards the response to the load balancer.
+10. The load balancer re-encrypts the response and forwards it to the user's browser.
+11. The user's browser decrypts the response and renders the website.
+
+### Purpose of Each Additional Element:
+
+1. **Firewalls:**
+   - **Purpose:** Protect servers from unauthorized access and various types of attacks by filtering incoming and outgoing traffic based on predefined security rules.
+
+2. **SSL Certificate:**
+   - **Purpose:** Encrypts traffic between the user's browser and the load balancer, ensuring secure data transmission and protecting sensitive information from interception.
+
+3. **Monitoring Clients:**
+   - **Purpose:** Collects data on server performance and status, sending it to a monitoring service to detect and address issues proactively.
+
+### Specifics About the Infrastructure:
+
+1. **Firewalls:**
+   - **Purpose:** To provide a security layer that filters and controls incoming and outgoing network traffic based on predetermined security rules.
+
+2. **HTTPS:**
+   - **Purpose:** Encrypts data between the user's browser and the server, ensuring data privacy and integrity during transmission.
+
+3. **Monitoring:**
+   - **Purpose:** Used to track the health and performance of servers, applications, and databases. It helps in identifying and resolving issues promptly.
+   - **Data Collection:** Monitoring clients on each server collect metrics (CPU, memory, disk usage, network traffic) and logs, sending this data to the monitoring service.
+
+4. **Monitoring Web Server QPS (Queries Per Second):**
+   - **Procedure:** Configure the monitoring client to track and report the number of HTTP/HTTPS requests processed by the web servers per second. This can be done by analyzing web server logs or using built-in metrics from Nginx.
+
+### Issues with This Infrastructure:
+
+1. **SSL Termination at Load Balancer:**
+   - **Issue:** Terminating SSL at the load balancer level means traffic between the load balancer and web servers is not encrypted, potentially exposing sensitive data to internal network threats.
+
+2. **Single Write-Enabled MySQL Server:**
+   - **Issue:** Having only one MySQL server capable of accepting writes creates a single point of failure. If the primary node fails, write operations cannot proceed, leading to potential data loss or downtime.
+
+3. **Homogeneous Server Components:**
+   - **Issue:** If all servers have the same components (web server, application server, database), a failure in one component can affect others. It also makes scaling and maintenance more complex as changes to one component can impact the entire server.
+
+### Summary:
+This secured three-server infrastructure includes a load balancer (HAProxy) with SSL termination, two web servers (Nginx) with application servers, a MySQL database in a Primary-Replica configuration, firewalls for each server, and monitoring clients. This setup improves security, load distribution, and monitoring but still has potential issues with SSL termination at the load balancer, single write-enabled MySQL server, and having servers with homogeneous components.
