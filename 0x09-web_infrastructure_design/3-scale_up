@@ -1,0 +1,65 @@
+### Readme
+
+#### Infrastructure Design: Split Components with Redundancy
+
+**Scenario:**
+A user wants to access the website www.foobar.com.
+
+### Updated Infrastructure Components:
+
+1. **Load Balancers (HAProxy) in Cluster:**
+   - **Role:** Distributes incoming traffic across multiple servers to ensure no single server becomes overwhelmed, improving availability and reliability.
+   - **Cluster Configuration:** Two HAProxy instances configured in a cluster for redundancy. If one load balancer fails, the other takes over, preventing downtime.
+
+2. **Web Server (Nginx):**
+   - **Role:** Handles incoming HTTP/HTTPS requests, serves static content (HTML, CSS, JavaScript), and forwards dynamic requests to the application server.
+
+3. **Application Server:**
+   - **Role:** Processes dynamic requests, runs the application code, interacts with the database, and generates responses. It handles the core business logic of the application.
+
+4. **Database Server (MySQL):**
+   - **Role:** Stores all the data for the website. Configured in a Primary-Replica (Master-Slave) cluster for redundancy and improved read performance.
+
+### Additional Infrastructure:
+
+1. **New Server:**
+   - **Role:** Adds redundancy and improves performance by splitting the components (web server, application server, database) onto their own dedicated servers. This ensures that each server can be optimized and scaled independently based on its specific workload.
+
+### Communication Flow:
+
+1. The user types `www.foobar.com` into their browser.
+2. The browser sends a DNS request to resolve `www.foobar.com` to the IP address of the load balancer cluster.
+3. The browser sends an HTTPS request to the load balancer cluster (HAProxy).
+4. The load balancer distributes the request to the web server (Nginx) using the round-robin algorithm.
+5. The web server processes the request. If it's for static content, it serves it directly.
+6. If it's a request for dynamic content, the web server forwards it to the application server.
+7. The application server processes the request, interacts with the MySQL database if necessary, and generates a response.
+8. The application server sends the response back to the web server.
+9. The web server forwards the response to the load balancer.
+10. The load balancer forwards the response to the user's browser.
+11. The user's browser decrypts the response and renders the website.
+
+### Purpose of Each Additional Element:
+
+1. **Load Balancer Cluster:**
+   - **Purpose:** Provides redundancy and high availability. If one load balancer fails, the other takes over, ensuring continuous service.
+
+2. **Dedicated Web Server:**
+   - **Purpose:** Optimized for handling HTTP/HTTPS requests and serving static content, separating it from application logic processing.
+
+3. **Dedicated Application Server:**
+   - **Purpose:** Focuses on processing dynamic requests and running application code, allowing it to be scaled and optimized independently of the web server.
+
+4. **Dedicated Database Server:**
+   - **Purpose:** Focuses on storing and managing data, allowing it to be scaled and optimized independently of the web and application servers.
+
+### Specifics About the Infrastructure:
+
+1. **For Every Additional Element:**
+   - **Load Balancer Cluster:** Ensures high availability and fault tolerance by clustering load balancers.
+   - **Dedicated Web Server:** Separates concerns by offloading static content serving from dynamic request processing, improving performance and scalability.
+   - **Dedicated Application Server:** Isolates the application logic, allowing for more efficient scaling and resource allocation.
+   - **Dedicated Database Server:** Improves data handling performance and reliability by isolating the database from other components.
+
+### Summary:
+This infrastructure design includes a load balancer cluster (HAProxy) for high availability, a dedicated web server (Nginx), a dedicated application server, and a dedicated database server (MySQL). Splitting the components onto their own servers allows each to be optimized and scaled independently, improving performance, reliability, and scalability. This setup ensures that each component can handle its specific workload more efficiently, leading to a more robust and maintainable infrastructure.
