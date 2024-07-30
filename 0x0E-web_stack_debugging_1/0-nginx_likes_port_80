@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# This script configures Nginx to listen on port 80
+
+# Ensure Nginx is installed
+if ! command -v nginx &> /dev/null
+then
+    echo "Nginx is not installed. Installing..."
+    apt-get update
+    apt-get install -y nginx
+fi
+
+# Configure Nginx to listen on port 80
+cat <<EOF > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    
+    root /var/www/html;
+    index index.html;
+    
+    server_name _;
+    
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF
+
+# Test Nginx configuration
+nginx -t
+
+# Restart Nginx to apply changes
+systemctl restart nginx
