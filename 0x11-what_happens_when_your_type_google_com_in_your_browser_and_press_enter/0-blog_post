@@ -1,0 +1,82 @@
+## What Happens When You Type `https://www.google.com` in Your Browser and Press Enter?
+
+When you type `https://www.google.com` in your browser and press Enter, a complex sequence of events unfolds to retrieve and display the desired webpage. This process involves several key components, including DNS requests, TCP/IP, firewalls, HTTPS/SSL, load balancers, web servers, application servers, and databases. Let's break down each step:
+
+### 1. DNS Request
+
+**Domain Name System (DNS)**
+The first step in the process is the DNS resolution. The browser needs to convert the human-readable domain name (`www.google.com`) into an IP address, which is required to locate the web server hosting the website.
+
+1. **Browser Cache:** The browser first checks its cache to see if it has recently resolved the domain name. If found, it uses the cached IP address.
+2. **Operating System Cache:** If the browser cache misses, the operating system's DNS cache is queried.
+3. **Router Cache:** If not found, the request is sent to the router, which may have its own DNS cache.
+4. **ISP DNS Server:** The request is then forwarded to the ISP's DNS server. If the ISP's DNS server cannot resolve the domain, it queries other DNS servers in a hierarchical manner until the IP address is found.
+5. **Root and TLD Servers:** If necessary, the query may reach the root DNS servers, which direct the request to the appropriate Top-Level Domain (TLD) servers (e.g., `.com` servers), and eventually to the authoritative DNS server for `google.com`.
+
+### 2. TCP/IP
+
+**Transmission Control Protocol/Internet Protocol (TCP/IP)**
+Once the IP address is obtained, the browser initiates a TCP connection to the server using the IP address. TCP/IP is responsible for ensuring reliable data transmission between the client and server.
+
+1. **Three-Way Handshake:** 
+   - **SYN:** The client sends a SYN (synchronize) packet to the server to initiate the connection.
+   - **SYN-ACK:** The server responds with a SYN-ACK (synchronize-acknowledge) packet.
+   - **ACK:** The client sends an ACK (acknowledge) packet, establishing a reliable connection.
+
+### 3. Firewall
+
+**Network Security**
+Firewalls play a crucial role in protecting networks from unauthorized access and malicious traffic. Both the client and server may have firewalls that inspect incoming and outgoing packets based on predefined security rules.
+
+1. **Client-Side Firewall:** Ensures that outgoing requests are allowed and safe.
+2. **Server-Side Firewall:** Inspects incoming requests to ensure they are from legitimate sources and do not pose a threat.
+
+### 4. HTTPS/SSL
+
+**Secure Communication**
+The `https://` prefix indicates that the connection between the client and server is secured using SSL/TLS (Secure Sockets Layer/Transport Layer Security).
+
+1. **SSL/TLS Handshake:** 
+   - **ClientHello:** The client sends a request to initiate a secure session.
+   - **ServerHello:** The server responds with its SSL certificate, which contains the server's public key.
+   - **Key Exchange:** The client and server exchange cryptographic keys to establish a secure session.
+   - **Encryption:** Data transmitted between the client and server is encrypted, ensuring confidentiality and integrity.
+
+### 5. Load Balancer
+
+**Traffic Distribution**
+Large websites like Google use load balancers to distribute incoming traffic across multiple servers, ensuring no single server is overwhelmed and improving availability and performance.
+
+1. **Request Routing:** The load balancer receives the client's request and forwards it to one of the available web servers based on various algorithms (e.g., round-robin, least connections).
+
+### 6. Web Server
+
+**Handling HTTP Requests**
+The web server (e.g., Apache, Nginx) receives the request from the load balancer and processes it.
+
+1. **Static Content:** If the requested resource is a static file (e.g., HTML, CSS, JavaScript), the web server retrieves it from the file system and sends it back to the client.
+2. **Dynamic Content:** If the request requires dynamic content, the web server forwards it to the application server.
+
+### 7. Application Server
+
+**Processing Application Logic**
+The application server (e.g., Node.js, Django, Ruby on Rails) processes the business logic required to generate dynamic content.
+
+1. **Request Handling:** The application server receives the request from the web server, processes it, and interacts with databases or other services as needed.
+2. **Response Generation:** It generates the appropriate response (e.g., HTML, JSON) and sends it back to the web server.
+
+### 8. Database
+
+**Data Storage and Retrieval**
+The application server often interacts with a database to retrieve or store data required to fulfill the request.
+
+1. **Query Execution:** The application server executes SQL or NoSQL queries to fetch or update data in the database.
+2. **Data Transmission:** The database returns the requested data to the application server, which incorporates it into the response sent to the client.
+
+### Conclusion
+
+After all these steps, the requested webpage or resource is sent back to the client's browser, which renders it for the user to see. This entire process, from DNS resolution to displaying the content, happens in a matter of milliseconds, showcasing the efficiency and complexity of modern web technologies.
+
+### Publishing Your Blog Post
+
+Once your research is complete, draft your blog post incorporating the above information. Ensure that you explain each step clearly and concisely, providing enough detail for a technical audience to understand. After drafting, edit and proofread your content before publishing it on Medium or LinkedIn. Don't forget to share the URL of your blog post in your README.md file and any other required submission fields.
