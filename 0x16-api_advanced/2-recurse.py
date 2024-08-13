@@ -5,7 +5,7 @@ def recurse(subreddit, hot_list=[]):
     """ Recursively queries the Reddit API and returns a list of hot article titles for a given subreddit. """
     
     # Define the base URL for the Reddit API
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
     
     # Set the headers to use User-Agent
     headers = {
@@ -36,7 +36,7 @@ def recurse(subreddit, hot_list=[]):
     after = data['data'].get('after')
     if after:
         # Recursively call the function with the next page
-        next_url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+        next_url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
         response = requests.get(next_url, headers=headers, params={'after': after, 'limit': 100}, allow_redirects=False)
         if response.status_code == 200:
             return recurse(subreddit, hot_list)
