@@ -11,7 +11,8 @@ def number_of_subscribers(subreddit):
     Returns:
         int: The number of subscribers of the subreddit, or 0 if the subreddit is invalid.
     """
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    # Use format() method instead of f-string
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     headers = {'User-Agent': 'Mozilla/5.0'}
 
     try:
