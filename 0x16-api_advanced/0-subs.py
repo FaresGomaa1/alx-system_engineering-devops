@@ -12,7 +12,7 @@ def number_of_subscribers(subreddit):
         int: The number of subscribers of the subreddit, or 0 if the subreddit is invalid.
     """
     # Define the API URL
-    url = f"https://www.reddit.com/r/{subreddit}/about.json"
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     
     # Set a custom User-Agent to avoid 'Too Many Requests' errors
     headers = {'User-Agent': 'Mozilla/5.0'}
