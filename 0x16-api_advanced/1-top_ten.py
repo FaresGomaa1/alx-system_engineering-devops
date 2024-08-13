@@ -11,20 +11,25 @@ def top_ten(subreddit):
     Returns:
         None: Prints the titles of the top 10 hot posts or None if the subreddit is invalid.
     """
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
     headers = {'User-Agent': 'Mozilla/5.0'}
 
     try:
         response = requests.get(url, headers=headers, allow_redirects=False)
+        print(f"Status Code: {response.status_code}")  # Debugging line
         if response.status_code == 302:
             print(None)  # Redirect indicates an invalid subreddit
             return
         if response.status_code == 200:
             data = response.json()
             posts = data.get('data', {}).get('children', [])
+            if not posts:
+                print(None)
+                return
             for i in range(min(10, len(posts))):
                 print(posts[i].get('data', {}).get('title'))
         else:
             print(None)
-    except Exception:
+    except Exception as e:
+        print(f"Exception: {e}")  # Debugging line
         print(None)
