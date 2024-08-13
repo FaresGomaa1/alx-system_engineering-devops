@@ -31,5 +31,5 @@ def top_ten(subreddit):
         else:
             print(None)
     except Exception as e:
-        print(f"Exception: {e}")  # Debugging line
+        print("Exception: {}".format(e)) 
         print(None)
