@@ -1,14 +1,6 @@
-# Increse the request's limit
+# Fixes bad `phpp` extensions to `php` in the WordPress file `wp-settings.php`.
 
-# Increse ulimit value
-exec { 'fix-config-nginx':
-  onlyif  => 'test -e /etc/default/nginx',
-  command => 'sed -i "5s/[0-9]\+/$( ulimit -n )/" /etc/default/nginx',
-  path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-}
-
-# Restart nginex service
-exec { 'nginx-restart':
-  command => 'nginx restart',
-  path    => '/etc/init.d/'
+exec { 'fix-wordpress':
+  command => 'sed -i s/phpp/php/g /var/www/html/wp-settings.php',
+  path    => '/usr/local/bin/:/bin/'
 }
